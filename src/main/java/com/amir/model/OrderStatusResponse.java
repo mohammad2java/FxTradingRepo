@@ -1,8 +1,6 @@
-package com.amir.web;
+package com.amir.model;
 
 import java.util.concurrent.atomic.AtomicInteger;
-
-import com.amir.model.GenericResponse;
 
 import lombok.Getter;
 import lombok.Setter;

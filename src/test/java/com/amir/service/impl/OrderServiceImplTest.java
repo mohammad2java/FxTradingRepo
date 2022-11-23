@@ -14,7 +14,7 @@ import com.amir.model.CreateOrderResponse;
 import com.amir.model.FxOrder;
 import com.amir.model.OrderNotFoundException;
 import com.amir.model.OrderStatus;
-import com.amir.web.OrderStatusResponse;
+import com.amir.model.OrderStatusResponse;
 
 public class OrderServiceImplTest {
 

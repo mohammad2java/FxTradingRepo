@@ -17,9 +17,9 @@ import com.amir.model.FxCurrencies;
 import com.amir.model.FxOrder;
 import com.amir.model.OrderNotFoundException;
 import com.amir.model.OrderStatus;
+import com.amir.model.OrderStatusResponse;
 import com.amir.service.OrderService;
 import com.amir.service.PairFinderService;
-import com.amir.web.OrderStatusResponse;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

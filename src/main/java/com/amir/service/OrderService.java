@@ -2,7 +2,7 @@ package com.amir.service;
 
 import com.amir.model.CreateOrderRequest;
 import com.amir.model.CreateOrderResponse;
-import com.amir.web.OrderStatusResponse;
+import com.amir.model.OrderStatusResponse;
 
 public interface OrderService {
 
