@@ -1,10 +1,22 @@
 
-Swagger URL:
------------
-http://localhost:8080/swagger-ui.html
+Swagger URL:(for API documentations)
+-------------------------------------
+	http://localhost:8080/swagger-ui.html
 
 
-postman script for postman testing
+postman collection script
 -------------------------------
+	FxTrading.postman_collection.json you can file this files inside root dir.
 
-FxTrading.postman_collection.json
+
+code coverage snapshot.
+-------------------------
+
+<img src="code_coverage.JPG" width="700"/>
+
+
+
+swagger-ui snapshot
+-----------------------
+
+<img src="swagger-ui.JPG" width="700" />

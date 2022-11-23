@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -25,8 +26,7 @@ public class OrderServiceImplTest {
 
 	@Before
 	public void init() {
-		request = buidRequest();
-		System.out.println("init calling");
+		request = buidRequest(10,2,1);
 		FxOrder fxOrder =  new FxOrder();
 		fxOrder.setRequest(request);
 		fxOrder.setOrderId(new AtomicInteger(1));
@@ -37,17 +37,10 @@ public class OrderServiceImplTest {
 	}
 
 	@Test
-	public void createOrder_SellUSD_OrderID_1_PASS() {
+	public void createOrder_SellGBP_OrderID_1_PASS() {
 		Mockito.when(fxRepo.getOrders()).thenReturn(new ArrayList<>());
 		CreateOrderResponse createOrder = orderServiceImpl.createOrder(request);
 		assertTrue(createOrder.getOrderId().get() == 1);
-	}
-
-	@Test
-	public void createOrder_SellUSD_OrderID_0_FAILED() {
-		Mockito.when(fxRepo.getOrders()).thenReturn(new ArrayList<>());
-		CreateOrderResponse createOrder = orderServiceImpl.createOrder(request);
-		assertTrue(createOrder.getOrderId().get() != 0);
 	}
 
 	@Test(expected = OrderNotFoundException.class)
@@ -58,18 +51,45 @@ public class OrderServiceImplTest {
 	
 	
 	@Test
-	public void SearchOrder_SellUSD_OrderID_1_FOUND() {
+	public void SearchOrder_SellGBP_OrderID_1_FOUND() {
 		Mockito.when(fxRepo.getOrders()).thenReturn(orders);
 		OrderStatusResponse searchOrder = orderServiceImpl.searchOrder(Integer.valueOf(1));
 		assertTrue(searchOrder.getOrderId().get()==1);
 	}
 	
-
-	private CreateOrderRequest buidRequest() {
+	@Test
+	public void createOrder_SellUSD_OrderID_2_FULLYMATCHED() {
+		Mockito.when(fxRepo.getOrders()).thenReturn(orders);
+		CreateOrderResponse createOrder = orderServiceImpl.createOrder(buidRequest(20, 1, 2));
+		OrderStatusResponse searchOrder = orderServiceImpl.searchOrder(createOrder.getOrderId().get());
+		System.out.println(searchOrder.getStatus());
+		assertTrue(StringUtils.equalsIgnoreCase(searchOrder.getStatus(), OrderStatus.FULLY_MATCH.getCode()));
+	}
+	
+	
+	@Test
+	public void createOrder_SellUSD_OrderID_2_PARTIALLY_MATCHED() {
+		Mockito.when(fxRepo.getOrders()).thenReturn(orders);
+		CreateOrderResponse createOrder = orderServiceImpl.createOrder(buidRequest(10, 1, 2));
+		OrderStatusResponse searchOrder = orderServiceImpl.searchOrder(createOrder.getOrderId().get());
+		System.out.println(searchOrder.getStatus());
+		assertTrue(StringUtils.equalsIgnoreCase(searchOrder.getStatus(), OrderStatus.PARTIAL_MATCH.getCode()));
+	}
+	
+	@Test
+	public void createOrder_SellUSD_OrderID_1_PENDING() {
+		Mockito.when(fxRepo.getOrders()).thenReturn(new ArrayList<>());
+		CreateOrderResponse createOrder = orderServiceImpl.createOrder(request);
+		OrderStatusResponse searchOrder = orderServiceImpl.searchOrder(createOrder.getOrderId().get());
+		System.out.println(searchOrder.getStatus());
+		assertTrue(StringUtils.equalsIgnoreCase(searchOrder.getStatus(), OrderStatus.PENDING.getCode()));
+	}
+	
+	private CreateOrderRequest buidRequest(int amount, int currId, int buyCurrId) {
 		CreateOrderRequest request = new CreateOrderRequest();
-		request.setAmount(10);
-		request.setBuyingCurrenyId(1);
-		request.setCurrencyId(2);
+		request.setAmount(amount);
+		request.setBuyingCurrenyId(buyCurrId);
+		request.setCurrencyId(currId);
 		return request;
 	}
 
